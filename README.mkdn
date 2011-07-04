@@ -1,0 +1,26 @@
+# NAME
+
+test_utils - Test utilities and libraries
+
+# HOW TO USE
+
+copy t/lib/* to your t/
+
+# EXAMPLE
+
+using mysqld
+
+    use strict;
+    use Test::More;
+
+    use t::lib::Utils qw(dbh);
+
+    local $ENV{TEST_ENABLE_MYSQLD} = 1;
+    require 't/lib/start_daemon.pl';
+
+    my $dbh = dbh();
+    ok($dbh);
+    
+    ...;
+
+    done_testing;
