@@ -15,7 +15,7 @@ using mysqld
 
     use t::lib::Utils qw(dbh);
 
-    local $ENV{TEST_ENABLE_MYSQLD} = 1;
+    local $ENV{TEST_ENABLE_MYSQLD} = 1; # or set environment 'TEST_ENABLE_MYSQLD' in shell
     require 't/lib/start_daemon.pl';
 
     my $dbh = dbh();
