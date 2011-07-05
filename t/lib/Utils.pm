@@ -5,13 +5,14 @@ use warnings;
 
 use base qw/Exporter/;
 # our %EXPORT_TAGS = ( 'all' => [ qw/dbh http_request_ok start_plackup imap smtp/ ] );
-our %EXPORT_TAGS = ( 'all' => [ qw/dbh http_request_ok start_plackup/ ] );
+our %EXPORT_TAGS = ( 'all' => [ qw/dbh http_request_ok start_plackup memd/ ] );
 our @EXPORT_OK   = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT      = qw//;
 
 use lib './t/lib';
 use Test::More;
 use LWP::UserAgent;
+use Cache::Memcached::Fast;
 
 sub http_request_ok {
     my $req          = $_[0];
@@ -40,6 +41,16 @@ sub dbh {
     };
     require DBI;
     DBI->connect( $dsn, $user, $password, $attr );
+}
+
+sub memd {
+    my %args = @_;
+    my $servers = $args{servers} || [ split /,/, $ENV{TEST_MEMCACHED_SERVERS} ];
+    delete $args{servers};
+    Cache::Memcached::Fast->new({
+        servers => $servers,
+        %args,
+    });
 }
 
 sub start_plackup {
